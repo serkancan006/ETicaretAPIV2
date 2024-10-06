@@ -6,14 +6,8 @@ using System.Text;
 
 namespace ETicaretAPI.Infrastructure.Services
 {
-    public class MailService : IMailService
+    public class MailService(IConfiguration configuration) : IMailService
     {
-        readonly IConfiguration _configuration;
-
-        public MailService(IConfiguration configuration)
-        {
-            _configuration = configuration;
-        }
         public async Task SendMailAsync(string to, string subject, string body, bool isBodyHtml = true)
         {
             await SendMailAsync(new[] { to }, subject, body, isBodyHtml);
@@ -27,13 +21,13 @@ namespace ETicaretAPI.Infrastructure.Services
                 mail.To.Add(to);
             mail.Subject = subject;
             mail.Body = body;
-            mail.From = new(_configuration["Mail:Username"], "ScKaya E-Ticaret", System.Text.Encoding.UTF8);
+            mail.From = new(configuration["Mail:Username"], "ScKaya E-Ticaret", System.Text.Encoding.UTF8);
 
             SmtpClient smtp = new();
-            smtp.Credentials = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
-            smtp.Port = Convert.ToInt32(_configuration["Mail:Port"]);
-            smtp.EnableSsl = Convert.ToBoolean(_configuration["Mail:useSsl"]);
-            smtp.Host = _configuration["Mail:Host"];
+            smtp.Credentials = new NetworkCredential(configuration["Mail:Username"], configuration["Mail:Password"]);
+            smtp.Port = Convert.ToInt32(configuration["Mail:Port"]);
+            smtp.EnableSsl = Convert.ToBoolean(configuration["Mail:useSsl"]);
+            smtp.Host = configuration["Mail:Host"];
             await smtp.SendMailAsync(mail);
         }
 
@@ -41,7 +35,7 @@ namespace ETicaretAPI.Infrastructure.Services
         {
             StringBuilder mail = new();
             mail.AppendLine("Merhaba<br>Eğer yeni şifre talebinde bulunduysanız aşağıdaki linkten şifrenizi yenileyebilirsiniz.<br><strong><a target=\"_blank\" href=\"");
-            mail.AppendLine(_configuration["ClientUrl"]);
+            mail.AppendLine(configuration["ClientUrl"]);
             mail.AppendLine("/update-password/");
             mail.AppendLine(userId);
             mail.AppendLine("/");

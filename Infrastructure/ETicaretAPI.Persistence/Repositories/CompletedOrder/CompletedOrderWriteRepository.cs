@@ -4,10 +4,8 @@ using ETicaretAPI.Persistence.Contexts;
 
 namespace ETicaretAPI.Persistence.Repositories
 {
-    public class CompletedOrderWriteRepository : WriteRepository<CompletedOrder>, ICompletedOrderWriteRepository
+    public class CompletedOrderWriteRepository(ETicaretAPIDbContext context) : WriteRepository<CompletedOrder>(context), ICompletedOrderWriteRepository
     {
-        public CompletedOrderWriteRepository(ETicaretAPIDbContext context) : base(context)
-        {
-        }
+
     }
 }

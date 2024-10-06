@@ -6,20 +6,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ETicaretAPI.Persistence.Services
 {
-    public class OrderService : IOrderService
+    public class OrderService(
+            IOrderWriteRepository orderWriteRepository,
+            IOrderReadRepository orderReadRepository,
+            ICompletedOrderWriteRepository completedOrderWriteRepository,
+            ICompletedOrderReadRepository completedOrderReadRepository
+        ) : IOrderService
     {
-        readonly IOrderWriteRepository _orderWriteRepository;
-        readonly IOrderReadRepository _orderReadRepository;
-        readonly ICompletedOrderWriteRepository _completedOrderWriteRepository;
-        readonly ICompletedOrderReadRepository _completedOrderReadRepository;
-
-        public OrderService(IOrderWriteRepository orderWriteRepository, IOrderReadRepository orderReadRepository, ICompletedOrderWriteRepository completedOrderWriteRepository, ICompletedOrderReadRepository completedOrderReadRepository)
-        {
-            _orderWriteRepository = orderWriteRepository;
-            _orderReadRepository = orderReadRepository;
-            _completedOrderWriteRepository = completedOrderWriteRepository;
-            _completedOrderReadRepository = completedOrderReadRepository;
-        }
 
 
         public async Task CreateOrderAsync(CreateOrder createOrder)
@@ -27,19 +20,19 @@ namespace ETicaretAPI.Persistence.Services
             var orderCode = (new Random().NextDouble() * 10000).ToString();
             orderCode = orderCode.Substring(orderCode.IndexOf(".") + 1, orderCode.Length - orderCode.IndexOf(".") - 1);
 
-            await _orderWriteRepository.AddAsync(new()
+            await orderWriteRepository.AddAsync(new()
             {
                 Address = createOrder.Address,
                 Id = Guid.Parse(createOrder.BasketId),
                 Description = createOrder.Description,
                 OrderCode = orderCode
             });
-            await _orderWriteRepository.SaveAsync();
+            await orderWriteRepository.SaveAsync();
         }
 
         public async Task<ListOrder> GetAllOrdersAsync(int page, int size)
         {
-            var query = _orderReadRepository.Table.Include(o => o.Basket)
+            var query = orderReadRepository.Table.Include(o => o.Basket)
                       .ThenInclude(b => b.User)
                       .Include(o => o.Basket)
                          .ThenInclude(b => b.BasketItems)
@@ -52,7 +45,7 @@ namespace ETicaretAPI.Persistence.Services
 
 
             var data2 = from order in data
-                        join completedOrder in _completedOrderReadRepository.Table
+                        join completedOrder in completedOrderReadRepository.Table
                            on order.Id equals completedOrder.OrderId into co
                         from _co in co.DefaultIfEmpty()
                         select new
@@ -81,13 +74,13 @@ namespace ETicaretAPI.Persistence.Services
 
         public async Task<SingleOrder> GetOrderByIdAsync(string id)
         {
-            var data = _orderReadRepository.Table
+            var data = orderReadRepository.Table
                                  .Include(o => o.Basket)
                                      .ThenInclude(b => b.BasketItems)
                                          .ThenInclude(bi => bi.Product);
 
             var data2 = await (from order in data
-                               join completedOrder in _completedOrderReadRepository.Table
+                               join completedOrder in completedOrderReadRepository.Table
                                     on order.Id equals completedOrder.OrderId into co
                                from _co in co.DefaultIfEmpty()
                                select new
@@ -120,15 +113,15 @@ namespace ETicaretAPI.Persistence.Services
 
         public async Task<(bool, CompletedOrderDTO)> CompleteOrderAsync(string id)
         {
-            Order? order = await _orderReadRepository.Table
+            Order? order = await orderReadRepository.Table
                 .Include(o => o.Basket)
                 .ThenInclude(b => b.User)
                 .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
 
             if (order != null)
             {
-                await _completedOrderWriteRepository.AddAsync(new() { OrderId = Guid.Parse(id) });
-                return (await _completedOrderWriteRepository.SaveAsync() > 0, new()
+                await completedOrderWriteRepository.AddAsync(new() { OrderId = Guid.Parse(id) });
+                return (await completedOrderWriteRepository.SaveAsync() > 0, new()
                 {
                     OrderCode = order.OrderCode,
                     OrderDate = order.CreatedDate,

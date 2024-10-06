@@ -6,10 +6,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ETicaretAPI.Persistence.Contexts
 {
-    public class ETicaretAPIDbContext : IdentityDbContext<AppUser, AppRole, string>
+    public class ETicaretAPIDbContext(DbContextOptions options) : IdentityDbContext<AppUser, AppRole, string>(options)
     {
-        public ETicaretAPIDbContext(DbContextOptions options) : base(options)
-        { }
+        // public ETicaretAPIDbContext(DbContextOptions options) : base(options){ }
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }

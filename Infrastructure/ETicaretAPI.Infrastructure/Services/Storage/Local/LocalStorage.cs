@@ -4,13 +4,8 @@ using Microsoft.AspNetCore.Http;
 
 namespace ETicaretAPI.Infrastructure.Services.Storage.Local
 {
-    public class LocalStorage : Storage, ILocalStorage
+    public class LocalStorage(IWebHostEnvironment webHostEnvironment) : Storage, ILocalStorage
     {
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        public LocalStorage(IWebHostEnvironment webHostEnvironment)
-        {
-            _webHostEnvironment = webHostEnvironment;
-        }
         public async Task DeleteAsync(string path, string fileName)
             => File.Delete($"{path}\\{fileName}");
 
@@ -40,7 +35,7 @@ namespace ETicaretAPI.Infrastructure.Services.Storage.Local
         }
         public async Task<List<(string fileName, string pathOrContainerName)>> UploadAsync(string path, IFormFileCollection files)
         {
-            string uploadPath = Path.Combine(_webHostEnvironment.WebRootPath, path);
+            string uploadPath = Path.Combine(webHostEnvironment.WebRootPath, path);
             if (!Directory.Exists(uploadPath))
                 Directory.CreateDirectory(uploadPath);
 

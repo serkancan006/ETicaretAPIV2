@@ -4,10 +4,8 @@ using ETicaretAPI.Persistence.Contexts;
 
 namespace ETicaretAPI.Persistence.Repositories
 {
-    public class BasketItemReadRepository : ReadRepository<BasketItem>, IBasketItemReadRepository
+    public class BasketItemReadRepository(ETicaretAPIDbContext context) : ReadRepository<BasketItem>(context), IBasketItemReadRepository
     {
-        public BasketItemReadRepository(ETicaretAPIDbContext context) : base(context)
-        {
-        }
+
     }
 }

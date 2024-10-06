@@ -10,28 +10,19 @@ using System.Text;
 
 namespace ETicaretAPI.Infrastructure.Services.Token
 {
-    public class TokenHandler : ITokenHandler
+    public class TokenHandler(IConfiguration configuration, UserManager<AppUser> userManager) : ITokenHandler
     {
-        readonly IConfiguration _configuration;
-        readonly UserManager<AppUser> _userManager;
-
-        public TokenHandler(IConfiguration configuration, UserManager<AppUser> userManager)
-        {
-            _configuration = configuration;
-            _userManager = userManager;
-        }
-
         public async Task<Application.DTOs.Token> CreateAccessTokenAsync(int second, AppUser user)
         {
             Application.DTOs.Token token = new();
 
             //Security Key'in simetriğini alıyoruz.
-            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(_configuration["Token:SecurityKey"]));
+            SymmetricSecurityKey securityKey = new(Encoding.UTF8.GetBytes(configuration["Token:SecurityKey"]));
 
             //Şifrelenmiş kimliği oluşturuyoruz.
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
             var claims = new List<Claim> { new(ClaimTypes.Name, user.UserName) };
-            var userRoles = await _userManager.GetRolesAsync(user);
+            var userRoles = await userManager.GetRolesAsync(user);
             if (userRoles != null && userRoles.Count > 0)
             {
                 foreach (var userRole in userRoles)
@@ -43,8 +34,8 @@ namespace ETicaretAPI.Infrastructure.Services.Token
             //Oluşturulacak token ayarlarını veriyoruz.
             token.Expiration = DateTime.UtcNow.AddSeconds(second);
             JwtSecurityToken securityToken = new(
-                audience: _configuration["Token:Audience"],
-                issuer: _configuration["Token:Issuer"],
+                audience: configuration["Token:Audience"],
+                issuer: configuration["Token:Issuer"],
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
                 signingCredentials: signingCredentials,

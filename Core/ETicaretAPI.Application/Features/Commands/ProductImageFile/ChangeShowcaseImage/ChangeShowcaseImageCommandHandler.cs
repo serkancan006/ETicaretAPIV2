@@ -1,5 +1,4 @@
 ﻿using ETicaretAPI.Application.Repositories;
-using Microsoft.EntityFrameworkCore;
 
 namespace ETicaretAPI.Application.Features.Commands.ProductImageFile.ChangeShowcaseImage
 {
