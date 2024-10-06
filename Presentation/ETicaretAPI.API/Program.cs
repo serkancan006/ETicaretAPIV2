@@ -36,7 +36,7 @@ builder.Services.AddStorage<LocalStorage>();
 //builder.Services.AddStorage();
 // Cors
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-    policy.WithOrigins(builder.Configuration["AngularClientUrl"]).AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+    policy.WithOrigins(builder.Configuration["ClientUrl"]).AllowAnyHeader().AllowAnyMethod().AllowCredentials()
 ));
 
 #region Logs
@@ -144,7 +144,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidIssuer = builder.Configuration["Token:Issuer"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Token:SecurityKey"])),
             LifetimeValidator = (notBefore, expires, securityToken, validationParameters) => expires != null ? expires > DateTime.UtcNow : false,
-
+            // ClockSkew = TimeSpan.Zero,  // zamanlarý eþitle
             NameClaimType = ClaimTypes.Name //JWT üzerinde Name claimne karþýlýk gelen deðeri User.Identity.Name propertysinden elde edebiliriz.
         };
     });

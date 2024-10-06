@@ -41,7 +41,7 @@ namespace ETicaretAPI.Infrastructure.Services
         {
             StringBuilder mail = new();
             mail.AppendLine("Merhaba<br>Eğer yeni şifre talebinde bulunduysanız aşağıdaki linkten şifrenizi yenileyebilirsiniz.<br><strong><a target=\"_blank\" href=\"");
-            mail.AppendLine(_configuration["AngularClientUrl"]);
+            mail.AppendLine(_configuration["ClientUrl"]);
             mail.AppendLine("/update-password/");
             mail.AppendLine(userId);
             mail.AppendLine("/");
