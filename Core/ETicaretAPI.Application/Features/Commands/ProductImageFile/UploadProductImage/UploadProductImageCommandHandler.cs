@@ -30,7 +30,8 @@ namespace ETicaretAPI.Application.Features.Commands.ProductImageFile.UploadProdu
                 FileName = r.fileName,
                 Path = r.pathOrContainerName,
                 Storage = _storageService.StorageName,
-                Products = new List<Domain.Entities.Product>() { product }
+                ProductId = product.Id,
+                Product = product,
             }).ToList());
 
             await _productImageFileWriteRepository.SaveAsync();

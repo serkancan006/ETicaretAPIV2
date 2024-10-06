@@ -4,6 +4,7 @@
     {
         Local,
         Azure,
-        AWS
+        AWS,
+        Minio
     }
 }

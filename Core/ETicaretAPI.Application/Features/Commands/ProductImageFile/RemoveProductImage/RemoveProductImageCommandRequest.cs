@@ -5,6 +5,5 @@ namespace ETicaretAPI.Application.Features.Commands.ProductImageFile.RemoveProdu
     public class RemoveProductImageCommandRequest : IRequest<RemoveProductImageCommandResponse>
     {
         public string Id { get; set; }
-        public string? ImageId { get; set; }
     }
 }

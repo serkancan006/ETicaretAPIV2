@@ -27,12 +27,12 @@ namespace ETicaretAPI.Infrastructure.Services
                 mail.To.Add(to);
             mail.Subject = subject;
             mail.Body = body;
-            mail.From = new(_configuration["Mail:Username"], "NG E-Ticaret", System.Text.Encoding.UTF8);
+            mail.From = new(_configuration["Mail:Username"], "ScKaya E-Ticaret", System.Text.Encoding.UTF8);
 
             SmtpClient smtp = new();
             smtp.Credentials = new NetworkCredential(_configuration["Mail:Username"], _configuration["Mail:Password"]);
-            smtp.Port = 587;
-            smtp.EnableSsl = true;
+            smtp.Port = Convert.ToInt32(_configuration["Mail:Port"]);
+            smtp.EnableSsl = Convert.ToBoolean(_configuration["Mail:useSsl"]);
             smtp.Host = _configuration["Mail:Host"];
             await smtp.SendMailAsync(mail);
         }
@@ -46,7 +46,7 @@ namespace ETicaretAPI.Infrastructure.Services
             mail.AppendLine(userId);
             mail.AppendLine("/");
             mail.AppendLine(resetToken);
-            mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br><span style=\"font-size:12px;\">NOT : Eğer ki bu talep tarafınızca gerçekleştirilmemişse lütfen bu maili ciddiye almayınız.</span><br>Saygılarımızla...<br><br><br>NG - Mini|E-Ticaret");
+            mail.AppendLine("\">Yeni şifre talebi için tıklayınız...</a></strong><br><br><span style=\"font-size:12px;\">NOT : Eğer ki bu talep tarafınızca gerçekleştirilmemişse lütfen bu maili ciddiye almayınız.</span><br>Saygılarımızla...<br><br><br>NG - ScKaya E-Ticaret");
 
             await SendMailAsync(to, "Şifre Yenileme Talebi", mail.ToString());
         }

@@ -1,5 +1,6 @@
 ﻿using ETicaretAPI.Application.Abstractions.Token;
 using ETicaretAPI.Domain.Entities.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -12,13 +13,15 @@ namespace ETicaretAPI.Infrastructure.Services.Token
     public class TokenHandler : ITokenHandler
     {
         readonly IConfiguration _configuration;
+        readonly UserManager<AppUser> _userManager;
 
-        public TokenHandler(IConfiguration configuration)
+        public TokenHandler(IConfiguration configuration, UserManager<AppUser> userManager)
         {
             _configuration = configuration;
+            _userManager = userManager;
         }
 
-        public Application.DTOs.Token CreateAccessToken(int second, AppUser user)
+        public async Task<Application.DTOs.Token> CreateAccessTokenAsync(int second, AppUser user)
         {
             Application.DTOs.Token token = new();
 
@@ -27,6 +30,15 @@ namespace ETicaretAPI.Infrastructure.Services.Token
 
             //Şifrelenmiş kimliği oluşturuyoruz.
             SigningCredentials signingCredentials = new(securityKey, SecurityAlgorithms.HmacSha256);
+            var claims = new List<Claim> { new(ClaimTypes.Name, user.UserName) };
+            var userRoles = await _userManager.GetRolesAsync(user);
+            if (userRoles != null && userRoles.Count > 0)
+            {
+                foreach (var userRole in userRoles)
+                {
+                    claims.Add(new Claim(ClaimTypes.Role, userRole));
+                }
+            }
 
             //Oluşturulacak token ayarlarını veriyoruz.
             token.Expiration = DateTime.UtcNow.AddSeconds(second);
@@ -36,7 +48,7 @@ namespace ETicaretAPI.Infrastructure.Services.Token
                 expires: token.Expiration,
                 notBefore: DateTime.UtcNow,
                 signingCredentials: signingCredentials,
-                claims: new List<Claim> { new(ClaimTypes.Name, user.UserName) }
+                claims: claims
                 );
 
             //Token oluşturucu sınıfından bir örnek alalım.

@@ -36,6 +36,9 @@ namespace ETicaretAPI.Infrastructure
                 case StorageType.AWS:
 
                     break;
+                case StorageType.Minio:
+
+                    break;
                 default:
                     serviceCollection.AddScoped<IStorage, LocalStorage>();
                     break;
