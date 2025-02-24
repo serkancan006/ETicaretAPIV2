@@ -34,9 +34,16 @@ builder.Services.AddStorage<LocalStorage>();
 //builder.Services.AddStorage<AzureStorage>();
 //builder.Services.AddStorage();
 // Cors
-builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
-    policy.WithOrigins(builder.Configuration["ClientUrl"]).AllowAnyHeader().AllowAnyMethod().AllowCredentials()
-));
+builder.Services.AddCors(options =>
+{
+    options.AddDefaultPolicy(policy =>
+        policy.AllowAnyOrigin()
+              .AllowAnyHeader()
+              .AllowAnyMethod());
+});
+//builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
+//    policy.WithOrigins(builder.Configuration["ClientUrl"]).AllowAnyHeader().AllowAnyMethod().AllowCredentials()
+//));
 
 #region Logs
 Logger log = new LoggerConfiguration()
@@ -187,7 +194,7 @@ if (app.Environment.IsDevelopment())
     app.UseHsts();
 }
 
-app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>()); // Glocal Exception Handler
+app.ConfigureExceptionHandler<Program>(app.Services.GetRequiredService<ILogger<Program>>()); // Global Exception Handler
 app.UseStaticFiles(); // Files
 
 app.UseSerilogRequestLogging(); // Serilog

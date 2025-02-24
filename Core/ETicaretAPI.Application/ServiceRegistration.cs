@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.Extensions.DependencyInjection;
+using System.Reflection;
 
 namespace ETicaretAPI.Application
 {
@@ -9,6 +10,7 @@ namespace ETicaretAPI.Application
         {
             collection.AddMediatR(typeof(ServiceRegistration));
             collection.AddHttpClient();
+            collection.AddAutoMapper(Assembly.GetExecutingAssembly());
         }
     }
 }
