@@ -36,8 +36,6 @@ namespace ETicaretAPI.Persistence
             }).AddEntityFrameworkStores<ETicaretAPIDbContext>()
             .AddDefaultTokenProviders();
 
-            services.AddScoped<ICustomerReadRepository, CustomerReadRepository>();
-            services.AddScoped<ICustomerWriteRepository, CustomerWriteRepository>();
             services.AddScoped<IOrderReadRepository, OrderReadRepository>();
             services.AddScoped<IOrderWriteRepository, OrderWriteRepository>();
             services.AddScoped<IProductReadRepository, ProductReadRepository>();
@@ -48,8 +46,6 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IBasketItemWriteRepository, BasketItemWriteRepository>();
             services.AddScoped<IBasketReadRepository, BasketReadRepository>();
             services.AddScoped<IBasketWriteRepository, BasketWriteRepository>();
-            services.AddScoped<ICompletedOrderReadRepository, CompletedOrderReadRepository>();
-            services.AddScoped<ICompletedOrderWriteRepository, CompletedOrderWriteRepository>();
             services.AddScoped<IMainCategoryReadRepository, MainCategoryReadRepository>();
             services.AddScoped<IMainCategoryWriteRepository, MainCategoryWriteRepository>();
             services.AddScoped<ISubCategoryReadRepository, SubCategoryReadRepository>();

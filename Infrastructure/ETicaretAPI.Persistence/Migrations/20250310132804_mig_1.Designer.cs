@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ETicaretAPI.Persistence.Migrations
 {
     [DbContext(typeof(ETicaretAPIDbContext))]
-    [Migration("20250223070500_mig_4")]
-    partial class mig_4
+    [Migration("20250310132804_mig_1")]
+    partial class mig_1
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -76,29 +76,6 @@ namespace ETicaretAPI.Persistence.Migrations
                     b.HasIndex("ProductId");
 
                     b.ToTable("BasketItems");
-                });
-
-            modelBuilder.Entity("ETicaretAPI.Domain.Entities.CompletedOrder", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<Guid>("OrderId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("OrderId")
-                        .IsUnique();
-
-                    b.ToTable("CompletedOrders");
                 });
 
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.Customer", b =>
@@ -254,10 +231,6 @@ namespace ETicaretAPI.Persistence.Migrations
                     b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("datetime2");
 
@@ -265,19 +238,91 @@ namespace ETicaretAPI.Persistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<bool>("IsSameAddress")
+                        .HasColumnType("bit");
+
+                    b.Property<Guid?>("OrderAddressBillingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("OrderAddressShippingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("OrderCode")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("OrderStatus")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PaymentStatus")
+                        .HasColumnType("int");
 
                     b.Property<DateTime>("UpdatedDate")
                         .HasColumnType("datetime2");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OrderAddressBillingId")
+                        .IsUnique()
+                        .HasFilter("[OrderAddressBillingId] IS NOT NULL");
+
+                    b.HasIndex("OrderAddressShippingId")
+                        .IsUnique()
+                        .HasFilter("[OrderAddressShippingId] IS NOT NULL");
+
                     b.HasIndex("OrderCode")
                         .IsUnique();
 
                     b.ToTable("Orders");
+                });
+
+            modelBuilder.Entity("ETicaretAPI.Domain.Entities.OrderAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("OrderAdres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderAdresTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderApartmentNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderBuildingNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderCity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderFloor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderNeighbourHood")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("OrderStreet")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OrderAddresses");
                 });
 
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.Product", b =>
@@ -374,6 +419,108 @@ namespace ETicaretAPI.Persistence.Migrations
                     b.HasIndex("MainCategoryId");
 
                     b.ToTable("SubCategories");
+                });
+
+            modelBuilder.Entity("ETicaretAPI.Domain.Entities.UserAddress", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("UserAdres")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserAdresTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserApartmentNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserBuildingNumber")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserCity")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserFloor")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserNeighbourHood")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserStreet")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("UserAddresses");
+                });
+
+            modelBuilder.Entity("ETicaretAPI.Domain.Entities.UserCard", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("AppUserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CardAlias")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardToken")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("CardUserKey")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("ExpireMonth")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ExpireYear")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("LastFourDigits")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("UpdatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("UserCards");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -512,17 +659,6 @@ namespace ETicaretAPI.Persistence.Migrations
                     b.Navigation("Product");
                 });
 
-            modelBuilder.Entity("ETicaretAPI.Domain.Entities.CompletedOrder", b =>
-                {
-                    b.HasOne("ETicaretAPI.Domain.Entities.Order", "Order")
-                        .WithOne("CompletedOrder")
-                        .HasForeignKey("ETicaretAPI.Domain.Entities.CompletedOrder", "OrderId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.Order", b =>
                 {
                     b.HasOne("ETicaretAPI.Domain.Entities.Basket", "Basket")
@@ -531,7 +667,21 @@ namespace ETicaretAPI.Persistence.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("ETicaretAPI.Domain.Entities.OrderAddress", "OrderAddressShipping")
+                        .WithOne("OrderShipping")
+                        .HasForeignKey("ETicaretAPI.Domain.Entities.Order", "OrderAddressBillingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("ETicaretAPI.Domain.Entities.OrderAddress", "OrderAddressBilling")
+                        .WithOne("OrderBilling")
+                        .HasForeignKey("ETicaretAPI.Domain.Entities.Order", "OrderAddressShippingId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.Navigation("Basket");
+
+                    b.Navigation("OrderAddressBilling");
+
+                    b.Navigation("OrderAddressShipping");
                 });
 
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.Product", b =>
@@ -565,6 +715,28 @@ namespace ETicaretAPI.Persistence.Migrations
                         .IsRequired();
 
                     b.Navigation("MainCategory");
+                });
+
+            modelBuilder.Entity("ETicaretAPI.Domain.Entities.UserAddress", b =>
+                {
+                    b.HasOne("ETicaretAPI.Domain.Entities.Identity.AppUser", "AppUser")
+                        .WithMany("UserAddresses")
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
+                });
+
+            modelBuilder.Entity("ETicaretAPI.Domain.Entities.UserCard", b =>
+                {
+                    b.HasOne("ETicaretAPI.Domain.Entities.Identity.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("AppUser");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -629,6 +801,8 @@ namespace ETicaretAPI.Persistence.Migrations
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.Identity.AppUser", b =>
                 {
                     b.Navigation("Baskets");
+
+                    b.Navigation("UserAddresses");
                 });
 
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.MainCategory", b =>
@@ -636,10 +810,11 @@ namespace ETicaretAPI.Persistence.Migrations
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("ETicaretAPI.Domain.Entities.Order", b =>
+            modelBuilder.Entity("ETicaretAPI.Domain.Entities.OrderAddress", b =>
                 {
-                    b.Navigation("CompletedOrder")
-                        .IsRequired();
+                    b.Navigation("OrderBilling");
+
+                    b.Navigation("OrderShipping");
                 });
 
             modelBuilder.Entity("ETicaretAPI.Domain.Entities.Product", b =>

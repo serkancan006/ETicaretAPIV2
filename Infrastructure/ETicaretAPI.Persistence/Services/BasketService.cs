@@ -12,11 +12,11 @@ namespace ETicaretAPI.Persistence.Services
     public class BasketService(
             IHttpContextAccessor httpContextAccessor,
             UserManager<AppUser> userManager,
-            IOrderReadRepository orderReadRepository,
             IBasketWriteRepository basketWriteRepository,
             IBasketItemWriteRepository basketItemWriteRepository,
             IBasketItemReadRepository basketItemReadRepository,
-            IBasketReadRepository basketReadRepository
+            IBasketReadRepository basketReadRepository,
+            IOrderReadRepository orderReadRepository
         ) : IBasketService
     {
 
@@ -37,7 +37,7 @@ namespace ETicaretAPI.Persistence.Services
                               select new
                               {
                                   Basket = basket,
-                                  Order = order
+                                  Order = order,
                               };
 
                 Basket? targetBasket = null;

@@ -21,7 +21,6 @@ namespace ETicaretAPI.Application.Features.Commands.Order.CreateOrder
         {
             await _orderService.CreateOrderAsync(new()
             {
-                Address = request.Address,
                 Description = request.Description,
                 BasketId = _basketService.GetUserActiveBasket?.Id.ToString()
             });

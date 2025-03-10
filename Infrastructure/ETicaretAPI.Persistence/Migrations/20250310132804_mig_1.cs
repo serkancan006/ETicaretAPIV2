@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -67,37 +68,39 @@ namespace ETicaretAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Files",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Storage = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Discriminator = table.Column<string>(type: "nvarchar(21)", maxLength: 21, nullable: false),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    Showcase = table.Column<bool>(type: "bit", nullable: true),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Files", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Products",
+                name: "MainCategories",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Stock = table.Column<int>(type: "int", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.PrimaryKey("PK_MainCategories", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OrderAddresses",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    OrderAdresTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderAdres = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderNeighbourHood = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderBuildingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderApartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderFloor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OrderAddresses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -227,25 +230,138 @@ namespace ETicaretAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ProductProductImageFile",
+                name: "UserAddresses",
                 columns: table => new
                 {
-                    ProductImageFilesId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    ProductsId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserAdresTitle = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserAdres = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserCity = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserNeighbourHood = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserStreet = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserBuildingNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserApartmentNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserFloor = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductProductImageFile", x => new { x.ProductImageFilesId, x.ProductsId });
+                    table.PrimaryKey("PK_UserAddresses", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ProductProductImageFile_Files_ProductImageFilesId",
-                        column: x => x.ProductImageFilesId,
-                        principalTable: "Files",
+                        name: "FK_UserAddresses_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserCards",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CardAlias = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CardToken = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    CardUserKey = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    LastFourDigits = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpireMonth = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ExpireYear = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    AppUserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserCards", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserCards_AspNetUsers_AppUserId",
+                        column: x => x.AppUserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagePath = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    MainCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_MainCategories_MainCategoryId",
+                        column: x => x.MainCategoryId,
+                        principalTable: "MainCategories",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Orders",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OrderCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    OrderAddressShippingId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    OrderAddressBillingId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    IsSameAddress = table.Column<bool>(type: "bit", nullable: false),
+                    OrderStatus = table.Column<int>(type: "int", nullable: false),
+                    PaymentStatus = table.Column<int>(type: "int", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Orders_Baskets_Id",
+                        column: x => x.Id,
+                        principalTable: "Baskets",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ProductProductImageFile_Products_ProductsId",
-                        column: x => x.ProductsId,
-                        principalTable: "Products",
+                        name: "FK_Orders_OrderAddresses_OrderAddressBillingId",
+                        column: x => x.OrderAddressBillingId,
+                        principalTable: "OrderAddresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_Orders_OrderAddresses_OrderAddressShippingId",
+                        column: x => x.OrderAddressShippingId,
+                        principalTable: "OrderAddresses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Products",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Stock = table.Column<int>(type: "int", nullable: false),
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    SubCategoryId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Products", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Products_SubCategories_SubCategoryId",
+                        column: x => x.SubCategoryId,
+                        principalTable: "SubCategories",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -279,43 +395,24 @@ namespace ETicaretAPI.Persistence.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Orders",
+                name: "ProductImageFiles",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    OrderCode = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    FileName = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Path = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Storage = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Showcase = table.Column<bool>(type: "bit", nullable: false),
+                    ProductId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Orders", x => x.Id);
+                    table.PrimaryKey("PK_ProductImageFiles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Orders_Baskets_Id",
-                        column: x => x.Id,
-                        principalTable: "Baskets",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "CompletedOrders",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    OrderId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UpdatedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_CompletedOrders", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_CompletedOrders_Orders_OrderId",
-                        column: x => x.OrderId,
-                        principalTable: "Orders",
+                        name: "FK_ProductImageFiles_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -375,10 +472,18 @@ namespace ETicaretAPI.Persistence.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_CompletedOrders_OrderId",
-                table: "CompletedOrders",
-                column: "OrderId",
-                unique: true);
+                name: "IX_Orders_OrderAddressBillingId",
+                table: "Orders",
+                column: "OrderAddressBillingId",
+                unique: true,
+                filter: "[OrderAddressBillingId] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Orders_OrderAddressShippingId",
+                table: "Orders",
+                column: "OrderAddressShippingId",
+                unique: true,
+                filter: "[OrderAddressShippingId] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Orders_OrderCode",
@@ -387,9 +492,29 @@ namespace ETicaretAPI.Persistence.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_ProductProductImageFile_ProductsId",
-                table: "ProductProductImageFile",
-                column: "ProductsId");
+                name: "IX_ProductImageFiles_ProductId",
+                table: "ProductImageFiles",
+                column: "ProductId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Products_SubCategoryId",
+                table: "Products",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategories_MainCategoryId",
+                table: "SubCategories",
+                column: "MainCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserAddresses_AppUserId",
+                table: "UserAddresses",
+                column: "AppUserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserCards_AppUserId",
+                table: "UserCards",
+                column: "AppUserId");
         }
 
         /// <inheritdoc />
@@ -414,31 +539,40 @@ namespace ETicaretAPI.Persistence.Migrations
                 name: "BasketItems");
 
             migrationBuilder.DropTable(
-                name: "CompletedOrders");
-
-            migrationBuilder.DropTable(
                 name: "Customers");
-
-            migrationBuilder.DropTable(
-                name: "ProductProductImageFile");
-
-            migrationBuilder.DropTable(
-                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Orders");
 
             migrationBuilder.DropTable(
-                name: "Files");
+                name: "ProductImageFiles");
 
             migrationBuilder.DropTable(
-                name: "Products");
+                name: "UserAddresses");
+
+            migrationBuilder.DropTable(
+                name: "UserCards");
+
+            migrationBuilder.DropTable(
+                name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "Baskets");
 
             migrationBuilder.DropTable(
+                name: "OrderAddresses");
+
+            migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "SubCategories");
+
+            migrationBuilder.DropTable(
+                name: "MainCategories");
         }
     }
 }

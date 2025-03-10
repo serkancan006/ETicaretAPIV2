@@ -3,6 +3,7 @@ using ETicaretAPI.Domain.Entities.Common;
 using ETicaretAPI.Domain.Entities.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 
 namespace ETicaretAPI.Persistence.Contexts
 {
@@ -12,13 +13,15 @@ namespace ETicaretAPI.Persistence.Contexts
 
         public DbSet<Product> Products { get; set; }
         public DbSet<Order> Orders { get; set; }
-        public DbSet<Customer> Customers { get; set; }
         public DbSet<ProductImageFile> ProductImageFiles { get; set; }
         public DbSet<Basket> Baskets { get; set; }
         public DbSet<BasketItem> BasketItems { get; set; }
-        public DbSet<CompletedOrder> CompletedOrders { get; set; }
         public DbSet<MainCategory> MainCategories { get; set; }
         public DbSet<SubCategory> SubCategories { get; set; }
+        public DbSet<UserAddress> UserAddresses { get; set; }
+        public DbSet<UserCard> UserCards { get; set; }
+        public DbSet<OrderAddress> OrderAddresses { get; set; }
+        public DbSet<OrderPayment> OrderPayments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Order>()
@@ -33,11 +36,23 @@ namespace ETicaretAPI.Persistence.Contexts
                 .WithOne(o => o.Basket)
                 .HasForeignKey<Order>(b => b.Id);
 
+            // OrderAdresses
             builder.Entity<Order>()
-                .HasOne(o => o.CompletedOrder)
-                .WithOne(c => c.Order)
-                .HasForeignKey<CompletedOrder>(c => c.OrderId);
-
+               .HasOne(x => x.OrderAddressBilling)
+               .WithOne(y => y.OrderBilling)
+               .HasForeignKey<Order>(z => z.OrderAddressShippingId)
+               .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Order>()
+                .HasOne(x => x.OrderAddressShipping)
+                .WithOne(y => y.OrderShipping)
+                .HasForeignKey<Order>(z => z.OrderAddressBillingId)
+                .OnDelete(DeleteBehavior.Restrict);
+            // Payment
+            builder.Entity<Order>()
+               .HasOne(x => x.OrderPayment)
+               .WithOne(y => y.Order)
+               .HasForeignKey<Order>(z => z.OrderPaymentId)
+               .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

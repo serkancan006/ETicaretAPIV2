@@ -19,11 +19,10 @@ namespace ETicaretAPI.Application.Features.Queries.Order.GetOrderById
             {
                 Id = data.Id,
                 OrderCode = data.OrderCode,
-                Address = data.Address,
                 BasketItems = data.BasketItems,
                 CreatedDate = data.CreatedDate,
                 Description = data.Description,
-                Completed = data.Completed
+                OrderStatus = data.OrderStatus
             };
         }
     }
