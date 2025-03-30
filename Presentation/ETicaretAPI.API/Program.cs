@@ -4,6 +4,7 @@ using ETicaretAPI.Application.Validators.Products;
 using ETicaretAPI.Infrastructure;
 using ETicaretAPI.Infrastructure.Filters;
 using ETicaretAPI.Infrastructure.Services.Storage.Local;
+using ETicaretAPI.Infrastructure.Services.Storage.Minio;
 using ETicaretAPI.Persistence;
 using ETicaretAPI.SignalR;
 using FluentValidation;
@@ -24,14 +25,23 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddHttpClient();
+builder.Services.AddHttpClient("NetgsmClient", client =>
+{
+    client.BaseAddress = new Uri(builder.Configuration["NetGsm:Url"]
+        ?? "https://api.netgsm.com.tr/sms/send/otp");  // URL doðru mu kontrol et
+    client.Timeout = TimeSpan.FromSeconds(30);
+    client.DefaultRequestHeaders.Add("Accept", "application/xml");
+});
 // Layers
 builder.Services.AddPersistenceServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddApplicationServices();
 builder.Services.AddSignalRServices();
 // Storages
-builder.Services.AddStorage<LocalStorage>();
+builder.Services.AddStorage<MinioStorage>();
 //builder.Services.AddStorage<AzureStorage>();
+//builder.Services.AddStorage<LocalStorage>();
 //builder.Services.AddStorage();
 // Cors
 builder.Services.AddCors(options =>

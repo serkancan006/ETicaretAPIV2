@@ -33,12 +33,15 @@ namespace ETicaretAPI.API.Controllers
             CreateOrderCommandResponse response = await mediator.Send(createOrderCommandRequest);
             return Ok(response);
         }
-
+        // siparişlerin tamamlanması için kurye tarafından kullanılacak veya kargo şirketi tarafından kullanılacak bir endpoint ödeme ve teslimin bittiğini gösterir
         [HttpGet("complete-order/{Id}")]
         public async Task<ActionResult> CompleteOrder([FromRoute] CompleteOrderCommandRequest completeOrderCommandRequest)
         {
             CompleteOrderCommandResponse response = await mediator.Send(completeOrderCommandRequest);
             return Ok(response);
         }
+
+    
+
     }
 }

@@ -12,5 +12,8 @@ namespace ETicaretAPI.Application.DTOs.Facebook
 
         [JsonPropertyName("name")]
         public string Name { get; set; }
+
+        [JsonPropertyName("surname")]
+        public string Surname { get; set; }
     }
 }

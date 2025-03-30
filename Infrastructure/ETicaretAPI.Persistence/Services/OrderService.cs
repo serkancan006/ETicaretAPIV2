@@ -18,7 +18,8 @@ namespace ETicaretAPI.Persistence.Services
             {
                 Id = Guid.Parse(createOrder.BasketId),
                 Description = createOrder.Description,
-                OrderStatus = Domain.Enums.OrderStatusEnum.Pending
+                OrderStatus = Domain.Enums.OrderStatusEnum.Pending,
+                
             });
             await orderWriteRepository.SaveAsync();
         }
@@ -97,6 +98,22 @@ namespace ETicaretAPI.Persistence.Services
                 });
             }
             return (false, null);
+        }
+
+        public async Task<Order> GetRealOrderByIdAsync(string id)
+        {
+            var data = await orderReadRepository.Table
+                                .Where(o => o.OrderStatus != Domain.Enums.OrderStatusEnum.Completed)
+                                .Include(ba => ba.OrderAddressBilling)
+                                .Include(sa => sa.OrderAddressShipping)
+                                 .Include(o => o.Basket)
+                                    .ThenInclude(u => u.User)
+                                 .Include(o => o.Basket)
+                                     .ThenInclude(b => b.BasketItems)
+                                         .ThenInclude(bi => bi.Product)
+                                         .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
+
+            return data;
         }
     }
 }

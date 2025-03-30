@@ -6,7 +6,7 @@ namespace ETicaretAPI.Domain.Entities
     public class SubCategory : BaseEntity
     {
         public string Name { get; set; }
-        public string ImagePath { get; set; }
+        public string? ImagePath { get; set; }
 
         public Guid MainCategoryId { get; set; }
         public MainCategory MainCategory { get; set; }

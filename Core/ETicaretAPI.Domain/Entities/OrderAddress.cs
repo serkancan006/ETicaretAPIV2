@@ -4,17 +4,17 @@ namespace ETicaretAPI.Domain.Entities
 {
     public class OrderAddress : BaseEntity
     {
-        public string OrderAdresTitle { get; set; }
-        public string OrderAdres { get; set; }
-        public string OrderCity { get; set; }
-        public string OrderNeighbourHood { get; set; }
-        public string OrderStreet { get; set; }
-        public string OrderBuildingNumber { get; set; }
-        public string OrderApartmentNumber { get; set; }
-        public string OrderFloor { get; set; }
+        public string OrderAdresTitle { get; set; } // ev, iş yeri, diğer
+        public string OrderAdres { get; set; } // açık adresi
+        public string OrderCity { get; set; }  // şehir
+        public string OrderNeighbourHood { get; set; } // mahalle
+        public string OrderStreet { get; set; } // cadde , sokak
+        public string OrderBuildingNumber { get; set; } // kapı no
+        public string OrderApartmentNumber { get; set; } // apartman no
+        public string OrderFloor { get; set; } // kat no
 
-       
-        public Order? OrderShipping { get; set; }
-        public Order? OrderBilling { get; set; }
+
+        public Order OrderShipping { get; set; }
+        public Order OrderBilling { get; set; }
     }
 }

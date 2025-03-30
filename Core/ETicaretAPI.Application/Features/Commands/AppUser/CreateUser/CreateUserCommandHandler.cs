@@ -17,7 +17,8 @@ namespace ETicaretAPI.Application.Features.Commands.AppUser.CreateUser
             CreateUserResponse response = await _userService.CreateAsync(new()
             {
                 Email = request.Email,
-                NameSurname = request.NameSurname,
+                Name = request.Name,
+                Surname = request.Surname,
                 Password = request.Password,
                 PasswordConfirm = request.PasswordConfirm,
                 Username = request.Username,

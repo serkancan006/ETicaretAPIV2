@@ -26,7 +26,7 @@ namespace ETicaretAPI.Persistence.Services
         readonly HttpClient _httpClient = httpClientFactory.CreateClient();
 
 
-        async Task<Token> CreateUserExternalAsync(AppUser user, string email, string name, UserLoginInfo info, int accessTokenLifeTime)
+        async Task<Token> CreateUserExternalAsync(AppUser user, string email, string name, string surname, UserLoginInfo info, int accessTokenLifeTime)
         {
             bool result = user != null;
             if (user == null)
@@ -39,7 +39,8 @@ namespace ETicaretAPI.Persistence.Services
                         Id = Guid.NewGuid().ToString(),
                         Email = email,
                         UserName = email,
-                        NameSurname = name
+                        Name = name,
+                        Surname = surname,
                     };
                     var identityResult = await userManager.CreateAsync(user);
                     result = identityResult.Succeeded;
@@ -76,7 +77,7 @@ namespace ETicaretAPI.Persistence.Services
                 var info = new UserLoginInfo("FACEBOOK", validation.Data.UserId, "FACEBOOK");
                 Domain.Entities.Identity.AppUser user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-                return await CreateUserExternalAsync(user, userInfo.Email, userInfo.Name, info, accessTokenLifeTime);
+                return await CreateUserExternalAsync(user, userInfo.Email, user.Name, user.Surname, info, accessTokenLifeTime);
             }
             throw new Exception("Invalid external authentication.");
         }
@@ -93,7 +94,7 @@ namespace ETicaretAPI.Persistence.Services
             var info = new UserLoginInfo("GOOGLE", payload.Subject, "GOOGLE");
             Domain.Entities.Identity.AppUser user = await userManager.FindByLoginAsync(info.LoginProvider, info.ProviderKey);
 
-            return await CreateUserExternalAsync(user, payload.Email, payload.Name, info, accessTokenLifeTime);
+            return await CreateUserExternalAsync(user, payload.Email, user.Name, user.Surname, info, accessTokenLifeTime);
         }
 
         public async Task<Token> LoginAsync(string usernameOrEmail, string password, int accessTokenLifeTime)
