@@ -3,4 +3,5 @@
 - kullanýcý e mail doðrulama servisleri yazýlacak
 - kullanýcý oluþturma ve login olurkenki hatalarýn türkçe yapýlandýrmasý yapýlacak
 - kapýda ödeme ve online ödeme endpointleri ayrýlabilir
+- validasyonlar tamamlanacak
 - hata ve sorunlar gözden geçirilecek. kodlar düzenlenecek
