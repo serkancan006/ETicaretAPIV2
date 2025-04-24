@@ -83,7 +83,8 @@ namespace ETicaretAPI.Application.Features.Commands.Order.CreateOrder
             });
 
             if (result.IsSuccess == false)
-                throw new Exception(result.ErrorMessage);
+                Console.WriteLine("Başarısız ödeme");
+                //throw new Exception(result.ErrorMessage);
             else
             {
                 order.PaymentId = result.PaymentId;
