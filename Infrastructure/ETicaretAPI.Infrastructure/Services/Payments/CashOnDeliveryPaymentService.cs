@@ -2,15 +2,16 @@
 using ETicaretAPI.Application.DTOs.Order;
 using ETicaretAPI.Application.DTOs.Payments;
 using ETicaretAPI.Application.Repositories;
+using Microsoft.EntityFrameworkCore;
 
 namespace ETicaretAPI.Infrastructure.Services.Payments
 {
-    public class CashOnDeliveryPaymentService(IOrderReadRepository orderReadRepository) : IPaymentService
+    public class CashOnDeliveryPaymentService(IBasketReadRepository basketReadRepository) : IPaymentService
     {
         public async Task<PaymentResult> ProcessPaymentAsync(CreateOrder createOrder, CreatePaymentCard createPaymentCard)
         {
-            var order = await orderReadRepository.GetByIdAsync(createOrder.BasketId);
-            if (order == null)
+            var basket = await basketReadRepository.Table.Include(x => x.User).Include(x => x.BasketItems).ThenInclude(x => x.Product).FirstOrDefaultAsync(x => x.Id == Guid.Parse(createOrder.BasketId));
+            if (createOrder == null)
             {
                 return await Task.FromResult(new PaymentResult
                 {
@@ -21,7 +22,7 @@ namespace ETicaretAPI.Infrastructure.Services.Payments
             }
             Console.WriteLine("📦 Kapıda ödeme işleniyor...");
 
-            var total = order.Basket.BasketItems.Sum(x => x.Product.Price * x.Quantity);
+            var total = basket.BasketItems.Sum(x => x.Product.Price * x.Quantity);
             if (total <= 0)
             {
                 return await Task.FromResult(new PaymentResult

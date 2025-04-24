@@ -23,6 +23,7 @@ namespace ETicaretAPI.Application.Features.Commands.Product.UpdateProduct
             product.Stock = request.Stock;
             product.Name = request.Name;
             product.Price = request.Price;
+            product.SubCategoryId = Guid.Parse(request.SubCategoryId);
             await _productWriteRepository.SaveAsync();
             _logger.LogInformation("Product güncellendi...");
             return new();

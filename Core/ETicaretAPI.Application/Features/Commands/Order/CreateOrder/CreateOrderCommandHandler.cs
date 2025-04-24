@@ -89,62 +89,18 @@ namespace ETicaretAPI.Application.Features.Commands.Order.CreateOrder
                 order.PaymentId = result.PaymentId;
                 order.ConversationId = result.ConversationId;
 
-                try
-                {
-                    await ExecuteWithRetryAsync(async () =>
-                    {
-                        await _orderService.CreateOrderAsync(order);
-                        await _orderHubService.OrderAddedMessageAsync("Heyy, yeni bir sipariş geldi! :) ");
-                        return true; // Başarılı ise true döndürüyoruz
-                    });
-                }
-                catch (Exception)
-                {
-
-                    throw;
-                }
+                await _orderService.CreateOrderAsync(order);
+                await _orderHubService.OrderAddedMessageAsync("Heyy, yeni bir sipariş geldi! :) ");
             }
-            // result sonucu
-            //public string? PaymentId { get; set; }
-            //public string? ConversationId { get; set; }
-            //public bool IsSuccess { get; set; }
-            //public string Message { get; set; }
-            //public string? ErrorMessage { get; set; }
 
-
-
-
-            return new();
-        }
-
-
-        private async Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> action, int maxRetryAttempts = 3, int retryDelayMilliseconds = 2000)
-        {
-            for (int attempt = 1; attempt <= maxRetryAttempts; attempt++)
+            return new()
             {
-                try
-                {
-                    // İşlemi gerçekleştir
-                    return await action();
-                }
-                catch (Exception ex)
-                {
-                    if (attempt == maxRetryAttempts) // Son deneme ise, hatayı fırlat
-                    {
-                        throw;
-                    }
-
-                    // Hata loglama işlemi (isteğe bağlı)
-                    Console.WriteLine($"Attempt {attempt} failed: {ex.Message}");
-
-                    // Yeniden denemeden önce bekleme
-                    await Task.Delay(retryDelayMilliseconds);
-                }
-            }
-
-            // Fallback (çalışmaması durumunda)
-            return default;
+                ConversationId = result.ConversationId,
+                ErrorMessage = result.ErrorMessage,
+                IsSuccess = result.IsSuccess,
+                Message = result.Message,
+                PaymentId = result.PaymentId
+            };
         }
-
     }
 }

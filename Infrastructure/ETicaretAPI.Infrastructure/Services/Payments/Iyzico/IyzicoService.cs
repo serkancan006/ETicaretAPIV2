@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using ETicaretAPI.Application.Abstractions.Payments;
 using ETicaretAPI.Application.Abstractions.Payments.Iyzico;
+using ETicaretAPI.Application.DTOs.Order;
 using ETicaretAPI.Application.DTOs.Payments;
 using ETicaretAPI.Domain.Entities;
 using Iyzipay.Model;
@@ -11,7 +12,7 @@ namespace ETicaretAPI.Infrastructure.Services.Payments.Iyzico
     public class IyzicoService(IyzicoClient iyzicoClient) : IOnlinePaymentGateway, IIyzicoService
     {
 
-        public async Task<PaymentResult> CreatePaymentAsync(Order order, CreatePaymentCard createPaymentCard)
+        public async Task<PaymentResult> CreatePaymentAsync(CreateOrder order, CreatePaymentCard createPaymentCard, Basket basket)
         {
             try
             {
@@ -26,11 +27,11 @@ namespace ETicaretAPI.Infrastructure.Services.Payments.Iyzico
 
                 Buyer buyer = new Buyer()
                 {
-                    Id = order.Basket.User.Id.ToString(),
-                    Name = order.Basket.User.Name,
-                    Surname = order.Basket.User.Surname,
-                    Email = order.Basket.User.Email,
-                    IdentityNumber = order.Basket.User.Id.ToString(),
+                    Id = basket.User.Id.ToString(),
+                    Name = basket.User.Name,
+                    Surname = basket.User.Surname,
+                    Email = basket.User.Email,
+                    IdentityNumber = basket.User.Id.ToString(),
                     RegistrationAddress = order?.BillingOrderNeighbourHood + "/" + order?.BillingOrderCity + " " + order?.BillingOrderAdres + " " + order?.BillingOrderApartmentNumber + "/" + order?.BillingOrderBuildingNumber,
                     City = order?.BillingOrderCity,
                     Country = "Turkey",
@@ -38,7 +39,7 @@ namespace ETicaretAPI.Infrastructure.Services.Payments.Iyzico
 
                 Address shippingAddress = new Address
                 {
-                    ContactName = order.Basket.User.Name + " " + order.Basket.User.Surname,
+                    ContactName = basket.User.Name + " " + basket.User.Surname,
                     City = order?.ShippingOrderCity,
                     Country = "Turkey",
                     Description = order?.ShippingOrderNeighbourHood + "/" + order?.ShippingOrderCity + " " + order?.ShippingOrderAdres + " " + order?.ShippingOrderApartmentNumber + "/" + order?.ShippingOrderBuildingNumber
@@ -46,13 +47,16 @@ namespace ETicaretAPI.Infrastructure.Services.Payments.Iyzico
 
                 Address billingAddress = new Address
                 {
-                    ContactName = order.Basket.User.Name + " " + order.Basket.User.Surname,
+                    ContactName = basket.User.Name + " " + basket.User.Surname,
                     City = order?.BillingOrderCity,
                     Country = "Turkey",
                     Description = order?.BillingOrderNeighbourHood + "/" + order?.BillingOrderCity + " " + order?.BillingOrderAdres + " " + order?.BillingOrderApartmentNumber + "/" + order?.BillingOrderBuildingNumber
                 };
 
-                List<Iyzipay.Model.BasketItem> basketItems = order.Basket.BasketItems
+                if (basket.BasketItems == null || basket.BasketItems.Count <= 0)
+                    throw new Exception("Sepette hiç ürün yok");
+
+                List<Iyzipay.Model.BasketItem> basketItems = basket.BasketItems
                     .Select(item => new Iyzipay.Model.BasketItem
                     {
                         Id = item.Id.ToString(),
@@ -64,16 +68,16 @@ namespace ETicaretAPI.Infrastructure.Services.Payments.Iyzico
                     })
                     .ToList();
 
-                var price = order.Basket.BasketItems.Sum(x => x.Product.Price);
+                var price = basket.BasketItems.Sum(x => x.Product.Price);
 
                 CreatePaymentRequest createPayment = new CreatePaymentRequest()
                 {
                     Locale = Locale.TR.ToString(),
-                    ConversationId = order.OrderCode,
+                    ConversationId = Guid.NewGuid().ToString(),
                     Price = price.ToString("F2", CultureInfo.InvariantCulture),
                     PaidPrice = price.ToString("F2", CultureInfo.InvariantCulture),
                     Currency = "TRY",
-                    BasketId = order.Basket.Id.ToString(),
+                    BasketId = basket.Id.ToString(),
                     PaymentCard = paymentCard,
                     Buyer = buyer,
                     ShippingAddress = shippingAddress,
