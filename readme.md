@@ -10,3 +10,8 @@
 - faturalandýrma kdv sistemi duruma göre yazýlabilir
 - iade sistemi yazýlacak
 - yapýlan ödeme providerý ile ödeme bilgileri geri getirecek endpointler yazýlabilir
+- cache sistemleri ile öneri ve önerilen ürünler endpointleri yazýlacak (çok satanlar, sizin için, indirimdeki ürünler, yeni gelenler gibi...)
+- log mekanizmasý gözden geçirilip düzenlenicek
+- authroization sistemi güçlendirilecek
+- projeye yapay zekalý sistemler kazandýrýlacak 
+- ( örneðin ürünlerin satýmý için ana ekranda öneri yapacak bir sistem, ürünlerin indirim oranlarýný, kullanýcýlarýn kiþisel bilgileri gibi durumlara göre öneri yapabilir.  )
