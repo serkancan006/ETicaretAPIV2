@@ -5,3 +5,8 @@
 - kapýda ödeme ve online ödeme endpointleri ayrýlabilir
 - validasyonlar tamamlanacak
 - hata ve sorunlar gözden geçirilecek. kodlar düzenlenecek
+- kampanya, indirim ve kupon sistemleri yazýlacak
+- kargo ücreti istenirse ve hýzlý teslimat tercigleri sistemi yazýlacak
+- faturalandýrma kdv sistemi duruma göre yazýlabilir
+- iade sistemi yazýlacak
+- yapýlan ödeme providerý ile ödeme bilgileri geri getirecek endpointler yazýlabilir
