@@ -1,7 +1,7 @@
-﻿using ETicaretAPI.Application.DTOs.Payment;
+﻿using ETicaretAPI.Application.DTOs.Payments;
 using ETicaretAPI.Domain.Entities;
 
-namespace ETicaretAPI.Application.Abstractions.Payment
+namespace ETicaretAPI.Application.Abstractions.Payments
 {
     public interface IOnlinePaymentGateway
     {

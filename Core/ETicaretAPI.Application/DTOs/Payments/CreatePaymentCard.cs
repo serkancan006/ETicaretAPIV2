@@ -1,14 +1,11 @@
-﻿using MediatR;
-
-namespace ETicaretAPI.Application.Features.Commands.Payment.CreatePayment
+﻿namespace ETicaretAPI.Application.DTOs.Payments
 {
-    public class CreatePaymentCommandRequest : IRequest<CreatePaymentCommandResponse>
+    public class CreatePaymentCard
     {
         public string CardHolderName { get; set; }
         public string CardNumber { get; set; }
         public string ExpireMonth { get; set; }
         public string ExpireYear { get; set; }
         public string CVC { get; set; }
-        public string OrderId { get; set; }
     }
 }

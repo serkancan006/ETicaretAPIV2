@@ -1,11 +1,9 @@
-﻿using ETicaretAPI.Application.Abstractions.Helpers;
-using ETicaretAPI.Application.Abstractions.Payment;
+﻿using ETicaretAPI.Application.Abstractions.Payments;
 using ETicaretAPI.Domain.Enums;
-using ETicaretAPI.Infrastructure.Services.Payments;
 
-namespace ETicaretAPI.Infrastructure.Helpers
+namespace ETicaretAPI.Infrastructure.Services.Payments
 {
-    public class HelpersInfrastructure : IHelpersInfrastructure
+    public class PaymentHelpers : IPaymentHelpers
     {
         public bool IsPaymentMethodMatch(IPaymentService service, PaymentTypeEnum paymentType)
         {

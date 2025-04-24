@@ -18,8 +18,27 @@ namespace ETicaretAPI.Persistence.Services
             {
                 Id = Guid.Parse(createOrder.BasketId),
                 Description = createOrder.Description,
+                PaymentType = createOrder.PaymentType,
                 OrderStatus = Domain.Enums.OrderStatusEnum.Pending,
-                
+                OrderCode = Guid.NewGuid().ToString(),
+                ConversationId = createOrder.ConversationId,
+                PaymentId = createOrder.PaymentId,
+                BillingOrderBuildingNumber = createOrder.BillingOrderBuildingNumber,
+                BillingOrderNeighbourHood = createOrder.BillingOrderNeighbourHood,
+                BillingOrderAdres = createOrder.BillingOrderAdres,
+                BillingOrderAdresTitle = createOrder.BillingOrderAdresTitle,
+                BillingOrderApartmentNumber = createOrder.BillingOrderApartmentNumber,
+                BillingOrderCity = createOrder.BillingOrderCity,
+                BillingOrderFloor = createOrder.BillingOrderFloor,
+                BillingOrderStreet = createOrder.BillingOrderStreet,
+                ShippingOrderStreet = createOrder.ShippingOrderStreet,
+                ShippingOrderAdres = createOrder.ShippingOrderAdres,
+                ShippingOrderAdresTitle = createOrder.ShippingOrderAdresTitle,
+                ShippingOrderApartmentNumber = createOrder.ShippingOrderApartmentNumber,
+                ShippingOrderBuildingNumber = createOrder.ShippingOrderBuildingNumber,
+                ShippingOrderCity = createOrder.ShippingOrderCity,
+                ShippingOrderFloor = createOrder.ShippingOrderFloor,
+                ShippingOrderNeighbourHood = createOrder.ShippingOrderNeighbourHood,
             });
             await orderWriteRepository.SaveAsync();
         }
@@ -100,20 +119,5 @@ namespace ETicaretAPI.Persistence.Services
             return (false, null);
         }
 
-        public async Task<Order> GetRealOrderByIdAsync(string id)
-        {
-            var data = await orderReadRepository.Table
-                                .Where(o => o.OrderStatus != Domain.Enums.OrderStatusEnum.Completed)
-                                .Include(ba => ba.OrderAddressBilling)
-                                .Include(sa => sa.OrderAddressShipping)
-                                 .Include(o => o.Basket)
-                                    .ThenInclude(u => u.User)
-                                 .Include(o => o.Basket)
-                                     .ThenInclude(b => b.BasketItems)
-                                         .ThenInclude(bi => bi.Product)
-                                         .FirstOrDefaultAsync(o => o.Id == Guid.Parse(id));
-
-            return data;
-        }
     }
 }

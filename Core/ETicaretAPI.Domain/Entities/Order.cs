@@ -19,11 +19,30 @@ namespace ETicaretAPI.Domain.Entities
         // public PaymentStatusEnum PaymentStatus { get; set; }  // Payment status: Pending, Paid, Failed, Refunded
 
 
-        public string OrderCode { get; set; } = Guid.NewGuid().ToString();
+        public string OrderCode { get; set; } 
         public Basket Basket { get; set; }
-        public Guid OrderAddressShippingId { get; set; }
-        public OrderAddress OrderAddressShipping { get; set; }
-        public Guid OrderAddressBillingId { get; set; }
-        public OrderAddress OrderAddressBilling { get; set; }
+
+
+        // Adresler
+        //Shipping
+        public string ShippingOrderAdresTitle { get; set; } // ev, iş yeri, diğer
+        public string ShippingOrderAdres { get; set; } // açık adresi
+        public string ShippingOrderCity { get; set; }  // şehir
+        public string ShippingOrderNeighbourHood { get; set; } // mahalle
+        public string ShippingOrderStreet { get; set; } // cadde , sokak
+        public string ShippingOrderBuildingNumber { get; set; } // kapı no
+        public string ShippingOrderApartmentNumber { get; set; } // apartman no
+        public string ShippingOrderFloor { get; set; } // kat no
+        // Billing
+        public string BillingOrderAdresTitle { get; set; } // ev, iş yeri, diğer
+        public string BillingOrderAdres { get; set; } // açık adresi
+        public string BillingOrderCity { get; set; }  // şehir
+        public string BillingOrderNeighbourHood { get; set; } // mahalle
+        public string BillingOrderStreet { get; set; } // cadde , sokak
+        public string BillingOrderBuildingNumber { get; set; } // kapı no
+        public string BillingOrderApartmentNumber { get; set; } // apartman no
+        public string BillingOrderFloor { get; set; } // kat no
+
+
     }
 }

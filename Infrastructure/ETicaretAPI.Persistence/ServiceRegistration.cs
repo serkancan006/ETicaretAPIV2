@@ -50,6 +50,8 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IMainCategoryWriteRepository, MainCategoryWriteRepository>();
             services.AddScoped<ISubCategoryReadRepository, SubCategoryReadRepository>();
             services.AddScoped<ISubCategoryWriteRepository, SubCategoryWriteRepository>();
+            services.AddScoped<IUserAddressReadRepository, UserAddressReadRepository>();
+            services.AddScoped<IUserAddressWriteRepository, UserAddressWriteRepository>();
 
 
             services.AddScoped<IUserService, UserService>();
@@ -59,6 +61,7 @@ namespace ETicaretAPI.Persistence
             services.AddScoped<IBasketService, BasketService>();
             services.AddScoped<IOrderService, OrderService>();
             services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IUserAddressService, UserAddressService>();
         }
     }
 }

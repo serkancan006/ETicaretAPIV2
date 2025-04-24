@@ -1,12 +1,10 @@
 ﻿using ETicaretAPI.Application.Abstractions.Encrypt;
-using ETicaretAPI.Application.Abstractions.Helpers;
-using ETicaretAPI.Application.Abstractions.Payment;
+using ETicaretAPI.Application.Abstractions.Payments;
 using ETicaretAPI.Application.Abstractions.Services;
 using ETicaretAPI.Application.Abstractions.Sms;
 using ETicaretAPI.Application.Abstractions.Storage;
 using ETicaretAPI.Application.Abstractions.Token;
 using ETicaretAPI.Infrastructure.Enums;
-using ETicaretAPI.Infrastructure.Helpers;
 using ETicaretAPI.Infrastructure.Services;
 using ETicaretAPI.Infrastructure.Services.Encrypt;
 using ETicaretAPI.Infrastructure.Services.Payments;
@@ -28,7 +26,7 @@ namespace ETicaretAPI.Infrastructure
             serviceCollection.AddScoped<IStorageService, StorageService>();
             serviceCollection.AddScoped<ITokenHandler, TokenHandler>();
             serviceCollection.AddScoped<IMailService, MailService>();
-            serviceCollection.AddScoped<IHelpersInfrastructure, HelpersInfrastructure>();
+            serviceCollection.AddScoped<IPaymentHelpers, PaymentHelpers>();
             serviceCollection.AddScoped<IEncryptionService, EncryptionService>();
             serviceCollection.AddScoped<ISmsService, SmsService>();
             // --------------------------------------------------------------------

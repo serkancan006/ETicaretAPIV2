@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using ETicaretAPI.Application.DTOs.Category;
+using ETicaretAPI.Application.DTOs.UserAddress;
 using ETicaretAPI.Domain.Entities;
 
 namespace ETicaretAPI.Application.Mapper
@@ -15,6 +16,9 @@ namespace ETicaretAPI.Application.Mapper
             CreateMap<SubCategory, ListSubCategory>().ReverseMap();
             CreateMap<SubCategory, UpdateSubCategory>().ReverseMap();
             CreateMap<SubCategory, CreateSubCategory>().ReverseMap();
+
+
+            CreateMap<SingleUserAddress, UserAddress>().ReverseMap();
         }
     }
 }

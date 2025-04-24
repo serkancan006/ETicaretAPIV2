@@ -20,7 +20,6 @@ namespace ETicaretAPI.Persistence.Contexts
         public DbSet<SubCategory> SubCategories { get; set; }
         public DbSet<UserAddress> UserAddresses { get; set; }
         public DbSet<UserCard> UserCards { get; set; }
-        public DbSet<OrderAddress> OrderAddresses { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
             builder.Entity<Order>()
@@ -34,24 +33,6 @@ namespace ETicaretAPI.Persistence.Contexts
                 .HasOne(b => b.Order)
                 .WithOne(o => o.Basket)
                 .HasForeignKey<Order>(b => b.Id);
-
-            // OrderAdresses
-            builder.Entity<Order>()
-               .HasOne(x => x.OrderAddressBilling)
-               .WithOne(y => y.OrderBilling)
-               .HasForeignKey<Order>(z => z.OrderAddressShippingId)
-               .OnDelete(DeleteBehavior.Restrict);
-            builder.Entity<Order>()
-                .HasOne(x => x.OrderAddressShipping)
-                .WithOne(y => y.OrderShipping)
-                .HasForeignKey<Order>(z => z.OrderAddressBillingId)
-                .OnDelete(DeleteBehavior.Restrict);
-            // Payment
-            //builder.Entity<Order>()
-            //   .HasOne(x => x.OrderPayment)
-            //   .WithOne(y => y.Order)
-            //   .HasForeignKey<Order>(z => z.OrderPaymentId)
-            //   .OnDelete(DeleteBehavior.Restrict);
 
             base.OnModelCreating(builder);
         }

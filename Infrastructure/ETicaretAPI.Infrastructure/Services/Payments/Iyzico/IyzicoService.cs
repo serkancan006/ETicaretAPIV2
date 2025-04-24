@@ -1,7 +1,7 @@
 ﻿using System.Globalization;
-using ETicaretAPI.Application.Abstractions.Payment;
-using ETicaretAPI.Application.Abstractions.Payment.Iyzico;
-using ETicaretAPI.Application.DTOs.Payment;
+using ETicaretAPI.Application.Abstractions.Payments;
+using ETicaretAPI.Application.Abstractions.Payments.Iyzico;
+using ETicaretAPI.Application.DTOs.Payments;
 using ETicaretAPI.Domain.Entities;
 using Iyzipay.Model;
 using Iyzipay.Request;
@@ -31,25 +31,25 @@ namespace ETicaretAPI.Infrastructure.Services.Payments.Iyzico
                     Surname = order.Basket.User.Surname,
                     Email = order.Basket.User.Email,
                     IdentityNumber = order.Basket.User.Id.ToString(),
-                    RegistrationAddress = order?.OrderAddressBilling?.OrderNeighbourHood + "/" + order?.OrderAddressBilling?.OrderCity + " " + order?.OrderAddressBilling?.OrderAdres + " " + order?.OrderAddressBilling?.OrderApartmentNumber + "/" + order?.OrderAddressBilling?.OrderBuildingNumber,
-                    City = order?.OrderAddressBilling?.OrderCity,
+                    RegistrationAddress = order?.BillingOrderNeighbourHood + "/" + order?.BillingOrderCity + " " + order?.BillingOrderAdres + " " + order?.BillingOrderApartmentNumber + "/" + order?.BillingOrderBuildingNumber,
+                    City = order?.BillingOrderCity,
                     Country = "Turkey",
                 };
 
                 Address shippingAddress = new Address
                 {
                     ContactName = order.Basket.User.Name + " " + order.Basket.User.Surname,
-                    City = order?.OrderAddressShipping?.OrderCity,
+                    City = order?.ShippingOrderCity,
                     Country = "Turkey",
-                    Description = order?.OrderAddressBilling?.OrderNeighbourHood + "/" + order?.OrderAddressBilling?.OrderCity + " " + order?.OrderAddressBilling?.OrderAdres + " " + order?.OrderAddressBilling?.OrderApartmentNumber + "/" + order?.OrderAddressBilling?.OrderBuildingNumber
+                    Description = order?.ShippingOrderNeighbourHood + "/" + order?.ShippingOrderCity + " " + order?.ShippingOrderAdres + " " + order?.ShippingOrderApartmentNumber + "/" + order?.ShippingOrderBuildingNumber
                 };
 
                 Address billingAddress = new Address
                 {
                     ContactName = order.Basket.User.Name + " " + order.Basket.User.Surname,
-                    City = order?.OrderAddressBilling?.OrderCity,
+                    City = order?.BillingOrderCity,
                     Country = "Turkey",
-                    Description = order?.OrderAddressBilling?.OrderNeighbourHood + "/" + order?.OrderAddressBilling?.OrderCity + " " + order?.OrderAddressBilling?.OrderAdres + " " + order?.OrderAddressBilling?.OrderApartmentNumber + "/" + order?.OrderAddressBilling?.OrderBuildingNumber
+                    Description = order?.BillingOrderNeighbourHood + "/" + order?.BillingOrderCity + " " + order?.BillingOrderAdres + " " + order?.BillingOrderApartmentNumber + "/" + order?.BillingOrderBuildingNumber
                 };
 
                 List<Iyzipay.Model.BasketItem> basketItems = order.Basket.BasketItems
